@@ -119,3 +119,24 @@ SET constraint_exclusion = on;
 LANGUAGE plpgsql;
 
  
+########2.######
+ALTER TABLE distributors ADD COLUMN working_address varchar(30) SET NULL;;
+ALTER TABLE distributors ADD COLUMN passport_address varchar(30) SET NULL;;
+ALTER TABLE distributors ADD COLUMN emergency_address varchar(30) SET NULL;;
+
+
+4.
+SELECT
+ *
+FROM
+  scores
+  where amount like ('%.00') and account_id=?
+ORDER BY date DESC
+LIMIT 10
+
+explain plain select * from scores where amount like ('%.00') and account_id=? ORDER BY date DESC limit 10
+create index concurrently "idx_amount"
+on users using btree (amount);
+
+create index concurrently "idx_account_id"
+on users using btree (account_id);
