@@ -6,6 +6,15 @@ Partition the transactions table by month. You will need to use you’ll need to
 (a) doesn’t neglect efficiency, scalability, and maintainability and 
 (b) is fully confined within the database (no external dependencies).
 
+select to_timestamp(1509038400991 / 1000)::date;
+
+alter table public.transactions add column created_date DATE;
+
+update public.transactions
+set created_date=to_timestamp(cast(created as bigint) / 1000)::date;
+
+
+
 1. Create a new master table, new_transactions.
 create table new_transactions (
 id int,
