@@ -204,7 +204,8 @@ ALTER TABLE users ADD COLUMN passport_address text COLLATE pg_catalog."default";
 ALTER TABLE users ADD COLUMN emergency_address text COLLATE pg_catalog."default";
 
 
-4.
+#Exercice 4
+Create the most optimised index to support the following query: “Find the last 10 transactions with a perfectly round amount (meaning that the cents part is equal to zero, like 35.00 or 120.00) for a given account_id”
 
 select  cast(round( cast(amount as numeric),2) as varchar), account_id, created from public.transactions 
 where cast(round( cast(amount as numeric),2) as varchar)  like '%.00' and account_id='46f5d9a5-6292-4b67-a32b-90e44edea5c1'
@@ -213,22 +214,11 @@ limit 10;
 create INDEX idx_transactions_amount ON transactions (amount);
 create index idx_transactions_acc on transactions (account_id);
 
-SELECT
- *
-FROM
-  scores
-  where amount like ('%.00') and account_id=?
-ORDER BY date DESC
-LIMIT 10
 
-select gl_balance , cast( round(gl_balance, 2) as varchar ) as c
-from rdd.rdd_product
-where cast( round(gl_balance,2 ) as varchar ) like '%.00%'
-and eom_date >'01-Jul-2021'
+explain analyze select  cast(round( cast(amount as numeric),2) as varchar), account_id, created from public.transactions 
+where cast(round( cast(amount as numeric),2) as varchar)  like '%.00' and account_id='46f5d9a5-6292-4b67-a32b-90e44edea5c1'
+order by created desc
+limit 10;
 
-explain plain select * from scores where amount like ('%.00') and account_id=? ORDER BY date DESC limit 10
-create index concurrently "idx_amount"
-on users using btree (amount);
-
-create index concurrently "idx_account_id"
-on users using btree (account_id);
+create INDEX idx_transactions_amount ON transactions (amount);
+create index idx_transactions_acc on transactions (account_id);
