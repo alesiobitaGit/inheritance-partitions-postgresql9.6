@@ -134,6 +134,11 @@ FROM
 ORDER BY date DESC
 LIMIT 10
 
+select gl_balance , cast( round(gl_balance, 2) as varchar ) as c
+from rdd.rdd_product
+where cast( round(gl_balance,2 ) as varchar ) like '%.00%'
+and eom_date >'01-Jul-2021'
+
 explain plain select * from scores where amount like ('%.00') and account_id=? ORDER BY date DESC limit 10
 create index concurrently "idx_amount"
 on users using btree (amount);
