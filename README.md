@@ -333,3 +333,32 @@ limit 10;
 
 create INDEX idx_transactions_amount ON transactions (amount);
 create index idx_transactions_acc on transactions (account_id);
+
+
+
+#Exercise 1
+
+*Update Planner Statistics
+select reloptions from pg_class where relname='transactions';
+select relname,reltuples,relpages from pg_class where relname='transactions';
+explain select * from transactions;
+analyze transactions;
+
+*Query Cost and Explain Plan
+vacuum(verbose) transactions; (doesn`t release space to disk, fregmantation)
+vacuum(full,verbose) transactions; (it release space to disk, fragmantation)
+
+--(it shows the time when autovacuum will happen becase every 2 billion transanction a vaccum should be done for every table)
+select datname,age(datfrozenxid),current_setting('autovacuum_freeze_max_age')
+from pg_database order by 2 desc; 
+
+REINDEX DATABASE cerium; -- must be owner of database to run this query
+REINDEX SCHEMA public; -- must be owner of public schema to run this query
+--reindex all tables
+REINDEX TABLE accounts;
+REINDEX TABLE address_type;
+REINDEX TABLE cards;
+REINDEX TABLE optionally_addr;
+REINDEX TABLE transactions;
+REINDEX TABLE users;
+REINDEX TABLE users_optionally_addr;
