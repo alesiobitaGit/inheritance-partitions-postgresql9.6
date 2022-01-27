@@ -204,6 +204,117 @@ ALTER TABLE users ADD COLUMN passport_address text COLLATE pg_catalog."default";
 ALTER TABLE users ADD COLUMN emergency_address text COLLATE pg_catalog."default";
 
 
+-- Table: public.users
+
+-- DROP TABLE IF EXISTS public.users;
+
+CREATE TABLE IF NOT EXISTS public.users_optionally_addr
+(
+    user_id text COLLATE pg_catalog."default",
+    optianally_address_id text COLLATE pg_catalog."default"
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS public.optionally_addr
+    OWNER to jean_sammet;
+	
+CREATE TABLE IF NOT EXISTS public.optionally_addr
+(
+    id text COLLATE pg_catalog."default",
+    address_name text COLLATE pg_catalog."default",
+	address_type text collate pg_catalog."default"
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;	
+
+CREATE TABLE IF NOT EXISTS public.address_type
+(
+    id text COLLATE pg_catalog."default",
+	address_type text collate pg_catalog."default"
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;	
+	
+ALTER TABLE IF EXISTS public.address_type
+    OWNER to jean_sammet;
+	
+insert into address_type
+values (1,'working_address');
+
+insert into address_type
+values (2,'passport_address');
+
+insert into address_type
+values (3,'emergency_address');
+
+select * from public.address_type;
+
+----
+
+select * from public.optionally_addr
+
+Insert into public.optionally_addr
+values (1,'Street Haki Stermilli',1);
+
+Insert into public.optionally_addr
+values (2,'Street Bushi',2);
+
+Insert into public.optionally_addr
+values (3,'Street check1',3);
+
+Insert into public.optionally_addr
+values (4,'Street check2',1);
+
+Insert into public.optionally_addr
+values (5,'Street check3',2);
+
+----
+select * from public.users
+--"7c4ac61f-b76d-4b45-80bb-0ab13403edfc"
+--"9a564d9d-bf64-4ca9-a949-437dc7650b3c"
+select * from public.users_optionally_addr
+
+insert into users_optionally_addr
+values ('7c4ac61f-b76d-4b45-80bb-0ab13403edfc',1);
+
+
+insert into users_optionally_addr
+values ('7c4ac61f-b76d-4b45-80bb-0ab13403edfc',2);
+
+
+insert into users_optionally_addr
+values ('7c4ac61f-b76d-4b45-80bb-0ab13403edfc',3);
+
+
+insert into users_optionally_addr
+values ('9a564d9d-bf64-4ca9-a949-437dc7650b3c',4);
+
+
+insert into users_optionally_addr
+values ('9a564d9d-bf64-4ca9-a949-437dc7650b3c',5);
+
+
+--test examples
+
+select t1.first_name, t1.Last_name, t3.address_name, t4.address_type
+from users t1 inner join users_optionally_addr t2 on t1.id=t2.user_id
+inner join optionally_addr t3 on t2.optianally_address_id=t3.id
+inner join address_type t4 on t3.address_type_id=t4.id
+
+
+
+
+
+
+
+
 #Exercice 4
 Create the most optimised index to support the following query: “Find the last 10 transactions with a perfectly round amount (meaning that the cents part is equal to zero, like 35.00 or 120.00) for a given account_id”
 
